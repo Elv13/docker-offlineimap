@@ -1,21 +1,21 @@
-FROM debian:wheezy
-MAINTAINER Aditya Mukerjee <dev@chimeracoder.net>
+FROM debian:stretch
+MAINTAINER Emmanuel Lepage Vallee <elv1313+bugs@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get -qq update --fix-missing
 RUN apt-get install -y bash 
-RUN apt-get install -y wget
-RUN apt-get install -y -o Acquire::ForceIPv4=true offlineimap ca-certificates
+RUN apt-get install -y wget nano python-requests-oauthlib
+RUN apt-get install -y python-oauthlib offlineimap ca-certificates
 
 
 RUN useradd -m offlineimap
-ADD offlineimaprc /home/offlineimap/.offlineimaprc
 ADD run.sh /home/offlineimap/run.sh
 RUN chmod 755 /home/offlineimap/run.sh
 
-RUN chown offlineimap:offlineimap /home/offlineimap/.offlineimaprc
-
 RUN chown -R offlineimap:users /home/offlineimap/
+
+ADD offlineimaprc /home/offlineimap/.offlineimaprc
+RUN chown offlineimap:offlineimap /home/offlineimap/.offlineimaprc
 
 USER offlineimap
 

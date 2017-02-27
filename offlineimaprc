@@ -1,24 +1,49 @@
 [general]
-ui = ttyui
 accounts = GMail
 
+[mbnames]
+enabled = yes
+filename = ~/Mutt/muttrc.mailboxes
+header = "mailboxes "
+peritem = "+%(accountname)s/%(foldername)s"
+sep = " "
+footer = "\n"
+
 [Account GMail]
-localrepository = Gmail-Local
-remoterepository = Gmail-Remote
-#Controls how many accounts may be synchronized simultaneously
-maxsyncaccounts = 3 
-maxconnections = 3 
+localrepository = LocalExample
+remoterepository = RemoteExample
+synclabels = no
+ignorelabels = \Inbox, \Starred, \Sent, \Draft, \Spam, \Trash, \Important
 
-[Repository Gmail-Local]
+[Repository LocalExample]
 type = Maildir
-localfolders = /home/offlineimap/mail/GMail
+localfolders = ~/GMail
 
-[Repository Gmail-Remote]
-type = Gmail
-remoteuser = YOUR_EMAIL_ADDRESS@gmail.com
-remotepass = YOUR_PASSWORD_HERE
-sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+[Repository GmailLocalExample]
+type = GmailMaildir
+
+# Go to https://console.developers.google.com/apis/credentials
+# create a project, click credetials
+# git clone https://github.com/google/gmail-oauth2-tools
+# run:
+#    python2 gmail-oauth2-tools/python/oauth2.py --generate_oauth2_token \
+#    --client_id=<the text ending with .apps.googleusercontent.com> \
+#    --client_secret=<secret> 
+#
+# Do what it says, enter the codes below:
+
+[Repository RemoteExample]
+type = IMAP
+ssl = yes
 realdelete = no
-# Instead of closing the connection once a sync is complete, offlineimap will# send empty data to the server to hold the connection open. A value of 60
-# attempts to hold the connection for a minute between syncs (both quick and # autorefresh)
-keepalive = 60 
+remoteport = 993
+keepalive = 60
+remotehost = imap.gmail.com
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+oauth2_request_url = https://accounts.google.com/o/oauth2/token
+
+# If called with the docker script, this will be changed automatically
+remoteuser = YOUR_EMAIL
+oauth2_client_id = YOUR_CLIENT_ID
+oauth2_access_token = YOUR_ACCESS_TOKEN
+oauth2_refresh_token = YOUR_SECRET
